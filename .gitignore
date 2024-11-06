@@ -43,7 +43,7 @@ logs/
 .env.*
 
 # Project specific
-data_and_instructions/
+data_and_instructions/*
 flaga.txt
 flaga_info.yaml
 conversation_history.yaml
