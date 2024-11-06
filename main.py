@@ -1,51 +1,70 @@
+import os
 import importlib
-import pkgutil
-from challenges import *
+import re
 
-def get_available_challenges():
-    challenges = {}
-    print("\nSzukam dostępnych zadań...")
-    for _, name, _ in pkgutil.iter_modules(['challenges']):
-        if name.startswith('challenge'):
-            try:
-                module = importlib.import_module(f'challenges.{name}')
-                if hasattr(module, 'solve_challenge'):
-                    challenge_number = name.replace('challenge', '')
-                    description = module.__doc__ or "Brak opisu zadania"
-                    challenges[challenge_number] = {
-                        'module': module,
-                        'description': description.strip()
-                    }
-            except ImportError as e:
-                print(f"Nie można załadować modułu {name}: {e}")
-    return challenges
+def get_available_tasks():
+    tasks = []
+    challenges_dir = 'challenges'
+    
+    # Znajdź wszystkie pliki challengeS*.py w katalogu challenges
+    for filename in os.listdir(challenges_dir):
+        if filename.startswith('challenge') and filename.endswith('.py'):
+            # Wyciągnij ID zadania (np. S01E01) z nazwy pliku
+            match = re.match(r'challenge(S\d+E\d+)\.py', filename)
+            if match:
+                task_id = match.group(1)
+                module_name = filename[:-3]  # Usuń .py z nazwy
+                
+                try:
+                    # Zaimportuj moduł dynamicznie
+                    module = importlib.import_module(f'challenges.{module_name}')
+                    
+                    # Weź opis z docstringa modułu
+                    description = module.__doc__.strip() if module.__doc__ else "Brak opisu"
+                    
+                    tasks.append({
+                        'id': task_id,
+                        'description': description,
+                        'module': module_name
+                    })
+                except ImportError as e:
+                    print(f"Nie można załadować modułu {module_name}: {e}")
+    
+    # Sortuj zadania po ID
+    return sorted(tasks, key=lambda x: x['id'])
 
-def display_challenges(challenges):
+def display_tasks(tasks):
     print("\nDostępne zadania:")
     print("-" * 50)
-    for number, data in sorted(challenges.items()):
-        print(f"{number}. {data['description']}")
+    for i, task in enumerate(tasks, 1):
+        print(f"{i}. --{task['id']}-- {task['description']}")
     print("-" * 50)
 
 def main():
-    challenges = get_available_challenges()
+    tasks = get_available_tasks()
     
     while True:
-        display_challenges(challenges)
+        display_tasks(tasks)
         choice = input("\nWybierz numer zadania (q aby wyjść): ").strip()
         
         if choice.lower() == 'q':
             print("Do widzenia!")
             break
             
-        if choice in challenges:
-            print(f"\nUruchamiam zadanie {choice}...")
-            try:
-                challenges[choice]['module'].solve_challenge()
-            except Exception as e:
-                print(f"Błąd podczas wykonywania zadania: {e}")
-        else:
-            print(f"\nNieznane zadanie: {choice}")
+        try:
+            choice_idx = int(choice) - 1
+            if 0 <= choice_idx < len(tasks):
+                task = tasks[choice_idx]
+                print(f"\nUruchamiam zadanie {task['id']}...")
+                try:
+                    module = importlib.import_module(f"challenges.{task['module']}")
+                    module.solve_challenge()
+                except Exception as e:
+                    print(f"Błąd podczas wykonywania zadania: {e}")
+            else:
+                print(f"\nNieznane zadanie: {choice}")
+        except ValueError:
+            print(f"\nNieprawidłowy wybór: {choice}")
 
 if __name__ == "__main__":
     main() 
