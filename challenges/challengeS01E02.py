@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from utils.logger import setup_logger
 from datetime import datetime, timedelta
 
-logger = setup_logger('challenge2')
+logger = setup_logger('challengeS01E02')
 
 class RobotVerifier:
     def __init__(self):

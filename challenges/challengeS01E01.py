@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import time
 from utils.logger import setup_logger
 
-logger = setup_logger('challenge1')
+logger = setup_logger('challengeS01E01')
 
 class CaptchaSolver:
     def __init__(self):

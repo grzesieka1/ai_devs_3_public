@@ -8,7 +8,7 @@ from openai import OpenAI
 from utils.logger import setup_logger
 import re
 
-logger = setup_logger('challenge3')
+logger = setup_logger('challengeS01E03')
 
 class JSONCalibrator:
     def __init__(self):
