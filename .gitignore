@@ -1,0 +1,62 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.project
+.pydevproject
+.settings/
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env
+.env.*
+
+# Project specific
+data_and_instructions/
+flaga.txt
+flaga_info.yaml
+conversation_history.yaml
+config/project_config.yaml  # Dodane - plik konfiguracyjny
+scripts/venv_commands.sh    # Dodane - komendy venv
+
+# Cache
+__pycache__/
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# System files
+.DS_Store
+Thumbs.db
